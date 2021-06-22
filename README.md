@@ -15,7 +15,15 @@ Using this tool users can discover how role trusts are delegated in the organiza
 * AWS SSO Account 
 * py2neo
 
-Install Neo4j and add the connection details to `config.py`. Configure the sso organization user in `config.py` and follow the auth instructions in the console. Once started the tool will attempt to use the first valid role associated with the SSO account. If there is access denied the tool will move the next available role within the account. 
+## How to Use
+
+Install Neo4j and add the connection details to `config.py`. Configure the SSO organization URL in `config.py`.
+
+Run the tool with `python3 mapper.py`
+
+If there is no `token` file stored in the directory the SSO auth flow will start. The instructions and device link will be printed to the console. After auth, the SSO token will be saved to `./token`. If you wish to run the took on a new org make sure to delete the old `./token` file. 
+
+Once started the tool will attempt to use the first valid role associated with the SSO account. If there is access denied the tool will move the next available role within the account. 
 
 ### Notes
 
