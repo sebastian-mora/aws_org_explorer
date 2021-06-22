@@ -23,7 +23,6 @@ def saveTokenToCache(token):
     with open("token", 'w') as f:
         f.write(token)
 
-
 def processAccount(sso, aws_sso_token, account, db):
 
 
