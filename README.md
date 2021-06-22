@@ -17,9 +17,13 @@ Using this tool users can discover how role trusts are delegated in the organiza
 
 ## How to Use
 
-Install Neo4j and add the connection details to `config.py`. Configure the SSO organization URL in `config.py`.
+1. Install the Python3 requirements with `pip3 install -r requirementx.txt`
 
-Run the tool with `python3 mapper.py`
+2. Install Neo4j and add the connection details to `config.py`. 
+
+3. Configure the SSO organization URL in `config.py`.
+
+4. Run the tool with `python3 mapper.py`
 
 If there is no `token` file stored in the directory the SSO auth flow will start. The instructions and device link will be printed to the console. After auth, the SSO token will be saved to `./token`. If you wish to run the tool on a new org make sure to delete the old `./token` file. 
 
