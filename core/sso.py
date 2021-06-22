@@ -13,7 +13,7 @@ from config import sso_config
 def create_oidc_application(sso_oidc_client):
     print("Creating temporary AWS SSO OIDC application")
     client = sso_oidc_client.register_client(
-        clientName='never-gonna-give-you-up',
+        clientName='aws-org-mapper',
         clientType='public'
     )
     client_id = client.get('clientId')
