@@ -35,6 +35,8 @@ Once completed the graph is generated in Neo4j. Using the sample queries below o
 
 Does not currently support SAML Providers or SAML conditions. 
 
+I am currently not planning on implementing an interface for this tool as it serves more as an import tool for neo4j. I will be continuing to implement a better interface for the CLI to give the user more control over the execution. 
+
 # Example Queries 
 
 * List all Accounts 
