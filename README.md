@@ -62,6 +62,7 @@ Does not currently support SAML Providers or SAML conditions.
   `MATCH p=(a:Account)-[:ASSUMES]->(:Role)`
 
 * Find all roles assumed by a specific service.
+
   `MATCH p=(:Service {Service: "lambda"})-[:ASSUMES]->(r:Role) WHERE r.accountID = "11111111111"`
 
 ## Graph Structure
