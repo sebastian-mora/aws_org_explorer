@@ -6,6 +6,8 @@ The graph can be explored using Neo4j desktop or web client. Below you can find 
 
 Using this tool users can discover how role trusts are delegated in the organization and can help identify improve account isolation within the organization. For example, if there exists a role assumption path between two accounts the graph will be able to identify which roles and users are used to connect two accounts. 
 
+![](./imgs/graph.png)
+
 ## Requirements 
 
 * Neo4j
@@ -79,3 +81,11 @@ Does not currently support SAML Providers or SAML conditions.
 * Account -[ASSUMES]-> (Role/User)
 * Role -[ASSUMES]-> (Role)
 * User
+
+
+
+### Acknowledgment 
+
+Thanks to Christophe Tafani-Dereeper for the sso device auth code. Their code can be found here. 
+
+https://github.com/christophetd/aws-sso-device-code-authentication
