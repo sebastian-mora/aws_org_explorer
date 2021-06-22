@@ -23,7 +23,9 @@ Run the tool with `python3 mapper.py`
 
 If there is no `token` file stored in the directory the SSO auth flow will start. The instructions and device link will be printed to the console. After auth, the SSO token will be saved to `./token`. If you wish to run the took on a new org make sure to delete the old `./token` file. 
 
-Once started the tool will attempt to use the first valid role associated with the SSO account. If there is access denied the tool will move the next available role within the account. 
+The tool will attempt to use the first valid role associated with the SSO account. If there is access denied the tool will move the next available role within the account.
+
+Once the tool is done the graph will be have been generated in Neo4j. Using the sample queries below or designed your own by referencing the structure in `## Graph Structure` you can begin to extract information about the organization.
 
 ### Notes
 
