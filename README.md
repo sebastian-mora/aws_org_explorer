@@ -49,27 +49,27 @@ I am currently not planning on implementing an interface for this tool as it ser
 
 * List all users
 
-  `MATCH (u:Users) return u`
+  `MATCH (u:User) RETURN u`
 
 * Count number of cross-account relations 
 
-  `MATCH p=(A:Account)-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account}) return COUNT(p)`
+  `MATCH p=(A:Account)-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account) RETURN COUNT(p)`
 
 * Find all paths between account A and account B
 
-  `MATCH p=(A:Account {accountId: "111111111"})-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account {accountId: "222222222"}) return p`
+  `MATCH p=(A:Account {accountId: "111111111"})-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account {accountId: "222222222"}) RETURN p`
 
 * Find all routes from account A to any account 
 
-  `MATCH p=(A:Account {accountId: "111111111"})-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account}) return p`
+  `MATCH p=(A:Account {accountId: "111111111"})-[:OWNS]->(x)-[:ASSUMES]->(y)<-[:OWNS]-(B:Account}) RETURN p`
 
 * Find all roles that trust ":root" of an account. 
 
-  `MATCH p=(a:Account)-[:ASSUMES]->(:Role)`
+  `MATCH p=(a:Account)-[:ASSUMES]->(:Role) RETURN p`
 
 * Find all roles assumed by a specific service.
 
-  `MATCH p=(:Service {Service: "lambda"})-[:ASSUMES]->(r:Role) WHERE r.accountID = "11111111111"`
+  `MATCH p=(:Service {Service: "lambda"})-[:ASSUMES]->(r:Role) WHERE r.accountID = "11111111111" RETURN p`
 
 ## Graph Structure
 
@@ -90,14 +90,17 @@ I am currently not planning on implementing an interface for this tool as it ser
   - Arn
   - UserName
   - accountId
+* Service
+    - Service (lambda.amazonaws.com)
 
 
 ### Node Relations
 
 * Account -[OWNS]->(Role/User)
-* Account -[ASSUMES]-> (Role/User)
+* Account -[ASSUMES]-> (Role)
 * Role -[ASSUMES]-> (Role)
-* User
+* User -[ASSUMES]-> (Role)
+* Service -[ASSUMES]-> (Role)
 
 
 
