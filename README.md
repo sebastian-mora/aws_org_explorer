@@ -17,7 +17,7 @@ Using this tool users can discover how role trusts are delegated in the organiza
 
 ## How to Use
 
-1. Install the Python3 requirements with `pip3 install -r requirementx.txt`
+1. Install the Python3 requirements with `pip3 install -r requirements.txt`
 
 2. Install Neo4j and add the connection details to `config.py`. 
 
