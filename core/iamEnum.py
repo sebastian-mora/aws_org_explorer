@@ -10,7 +10,6 @@ def retreive_roles(client):
 
     return roles
 
-
 def retreive_users(client):
 
     res = client.list_users()

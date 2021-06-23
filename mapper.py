@@ -1,7 +1,6 @@
 import boto3
 import botocore
 
-
 from core.sso import retrieve_aws_sso_token, retrieve_aws_accounts, retrieve_credentials, retrieve_roles_in_account
 from core.iamEnum import retreive_roles, retreive_users
 from core.db import Db
@@ -11,24 +10,24 @@ import concurrent.futures
 from config import neo4j_config, sso_config
 
 
-def getTokenFromCache():
+def get_token_from_cache():
     try:
         with open("token", 'r') as f:
             return f.readline()
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         return None
 
 
-def saveTokenToCache(token):
+def save_token_to_cache(token):
     with open("token", 'w') as f:
         f.write(token)
 
-def processAccount(sso, aws_sso_token, account, db):
 
+def process_account(sso, aws_sso_token, account, db):
 
     sso_roles = retrieve_roles_in_account(sso, aws_sso_token, account)
 
-        # Loop through roles. If role get permission error on list, try next.
+    # Loop through roles. If role get permission error on list, try next.
     for access_role in sso_roles:
 
         print(f"\tListing {account['accountId']} using role, {access_role}")
@@ -37,26 +36,29 @@ def processAccount(sso, aws_sso_token, account, db):
             sso, aws_sso_token, account['accountId'], access_role)
 
         iamClient = boto3.client('iam', aws_access_key_id=aws_access_key_id,
-                                    aws_secret_access_key=aws_secret_access_key, aws_session_token=aws_session_token)
+                                 aws_secret_access_key=aws_secret_access_key,
+                                 aws_session_token=aws_session_token)
         try:
-                roles = retreive_roles(iamClient)
-                users = retreive_users(iamClient)
-                for role in roles:
-                    
-                    db.add_aws_role(role)
-                for user in users:
-                    db.add_aws_user(user)
+            roles = retreive_roles(iamClient)
+            users = retreive_users(iamClient)
+            
+            for role in roles:
+                db.add_aws_role(role)
+            for user in users:
+                db.add_aws_user(user)
 
-                # If no exceptions were had break this loop and start next account
-                break
+            # If no exceptions were had break this loop and start next account
+            break
+
         except botocore.exceptions.ClientError as error:
             if error.response['Error']['Code'] == 'AccessDenied':
                 print(
                     f"\tRole {access_role} does not have permissions to list users/roles...trying next role")
                 continue
 
+
 if __name__ == "__main__":
-    aws_sso_token = getTokenFromCache()
+    aws_sso_token = get_token_from_cache()
     db = Db(neo4j_config['host'], neo4j_config['user'], neo4j_config['pass'])
     sso = boto3.client('sso', region_name=sso_config['region'])
 
@@ -64,11 +66,8 @@ if __name__ == "__main__":
         aws_accounts_list = retrieve_aws_accounts(sso, aws_sso_token)
     except Exception as error:
         aws_sso_token = retrieve_aws_sso_token(None)
-        saveTokenToCache(aws_sso_token)
+        save_token_to_cache(aws_sso_token)
         aws_accounts_list = retrieve_aws_accounts(sso, aws_sso_token)
-
-    
-
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         futures = []
@@ -76,7 +75,7 @@ if __name__ == "__main__":
         for account in aws_accounts_list:
             db.add_aws_account(account)
             futures.append(executor.submit(
-                processAccount, sso, aws_sso_token, account, db))
+                process_account, sso, aws_sso_token, account, db))
 
         for future in concurrent.futures.as_completed(futures):
             count += 1
