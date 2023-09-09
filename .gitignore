@@ -1,3 +1,5 @@
 __pycache__
 config.py
 token
+.vscode/settings.json
+.env
