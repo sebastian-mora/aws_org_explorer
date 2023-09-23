@@ -4,9 +4,13 @@ import botocore
 from core.iamEnum import retreive_roles, retreive_users
 from core.db import Db
 
-import concurrent.futures
 
-from config import neo4j_config, sso_config
+from config import neo4j_config
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def process_account(assumed_role_arn, db):
@@ -30,11 +34,17 @@ def process_account(assumed_role_arn, db):
 
 
 if __name__ == "__main__":
-    db = Db(neo4j_config["host"], neo4j_config["user"], neo4j_config["pass"])
+    db = Db(
+        uri=os.getenv("NEO4J_URI"),
+        password=os.getenv("NEO4J_PASSWORD"),
+        user=os.getenv("NEO4J_USER"),
+    )
 
-    account = ""
-    role = ""
+    print(db.ping())
 
-    db.add_aws_account(account)
+    # account = ""
+    # role = ""
 
-    process_account(role, db)
+    # db.add_aws_account(account)
+
+    # process_account(role, db)
